@@ -19,8 +19,9 @@
 
     - name: Allow SSH connections with password
       copy: src=./Templates/sshd_config dest=/etc/ssh/ owner=root group=root mode=644 backup=yes
+    
     - name: Clonning GIT repo
-      git: repo=https://github.com/abaruchi/IcingaMonitor.git dest={{ base_dir }}/crossover/
+      git: repo=https://github.com/ferzescu/crossover.git dest={{ base_dir }}/crossover/
 
     - name: Install Icinga configuration file
       copy: src=./Templates/ido2db.cfg dest=/etc/icinga/ owner=root group=root mode=644 backup=yes
