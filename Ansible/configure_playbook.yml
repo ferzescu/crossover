@@ -1,0 +1,82 @@
+---
+- hosts: test
+  user: ec2-user
+  become: yes
+  vars:
+    password: acce$$2017
+    base_dir: "'/home/itriputen/'}}"
+    icinga_conf: '/etc/icinga/conf.d'
+
+  tasks:
+    - name: Add user itriputen in all hosts
+      user: name=itriputen shell=/bin/bash comment="Master User" password={{password}}
+
+    - name: Adding itriputen to sudoers
+      lineinfile: dest=/etc/sudoers
+        backup=yes
+        line='itriputen	ALL=(ALL)	NOPASSWD:ALL'
+        state=present
+
+    - name: Allow SSH connections with password
+      copy: src=./Templates/sshd_config dest=/etc/ssh/ owner=root group=root mode=644 backup=yes
+    - name: Clonning GIT repo
+      git: repo=https://github.com/abaruchi/IcingaMonitor.git dest={{ base_dir }}/crossover/
+
+    - name: Install Icinga configuration file
+      copy: src=./Templates/ido2db.cfg dest=/etc/icinga/ owner=root group=root mode=644 backup=yes
+
+    - name: Install packages from yum repos
+      yum: name={{ item }} state=latest update_cache=no
+      with_items:
+        - docker-engine
+        - icinga
+        - icinga-gui 
+        - icinga-doc 
+        - nagios-plugins
+        - icinga-idoutils-libdbi-mysql
+    
+    - name: Starting Icinga daemon
+      command: icinga -d /etc/icinga/icinga.cfg
+    
+    - name: Install python libs dependences
+      pip: name=docker-py
+
+    - name: Install boto python lib to connect to AWS S3
+      pip: name=boto
+
+    - name: Download Icinga Plugins
+      get_url: url=https://www.monitoring-plugins.org/download/monitoring-plugins-2.1.2.tar.gz dest=/tmp/
+    
+    - name: Create HTTP Icinga Conf file
+      template: src=./Templates/myhttpd.j2 dest={{ icinga_conf }}/myhttp.conf
+
+    - name: Create MySQL Icinga Conf file
+      template: src=./Templates/mydb.j2 dest={{ icinga_conf }}/mydb.conf
+
+    - name: Start docker service
+      service: name=docker state=started enabled=yes
+         
+    - name: Build or Check MySQL Image
+      docker_image: path="{{ base_dir }}/crossover/Docker/MySQL" name="mysql" state=present
+
+    - name: Start MySQL Image
+      docker: image="mysql" name="mydb" ports=0.0.0.0:3306:3306 state=started
+         
+    - name: Build or Check HTTPD Image
+      docker_image: path="{{ base_dir }}/crossover/Docker/HTTPD" name="httpd" state=present
+
+    - name: Start HTTP Image
+      docker: image="httpd" name="myhttpd" ports=0.0.0.0:80:80 state=started
+
+    - name: Copy cron script to root home dir
+      copy: src=../Scripts/{{ item }} dest=/root/ mode="a+x" 
+      with_items:
+        - Shell/cron_job.sh
+        - Shell/copy_docker_files.sh
+        - Shell/make_backup.sh
+        - Python/bkp_file_upload.py
+        - Python/log_file_upload.py
+        - Python/uploadS3.py
+        
+    - name: Create cron job to send files to S3
+      cron: name="Job to copy log files to AWS S3." minute="0" hour="19" job="/root/cron_job.sh"
