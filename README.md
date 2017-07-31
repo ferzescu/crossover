@@ -15,12 +15,12 @@ This document is describing on how to setup a monitoring solution using Icinga. 
 
 |REPO_ID | REPO_NAME |
 |--------|-----------|
-DOCKER-MAIN-REPO                                               	Docker main Repository
-EPEL/X86_64                                                    	Extra Packages for Enterprise Linux 7 - x86_64
-ICINGA-STABLE-RELEASE/7SERVER	                                  ICINGA (stable release for epel)  
-RHUI-REGION-CLIENT-CONFIG-SERVER-7/X86_64	                      rhui-REGION-client-config-server-7/x86_64
-RHUI-REGION-RHEL-SERVER-RELEASES/7SERVER/X86_64	                Red Hat Enterprise Linux Server 7 (RPMs)
-!RHUI-REGION-RHEL-SERVER-RH-COMMON/7SERVER/X86_64	              Red Hat Enterprise Linux Server 7 RH Common (RPMs)
+|DOCKER-MAIN-REPO | 	Docker main Repository |
+|EPEL/X86_64 |                                                   	Extra Packages for Enterprise Linux 7 - x86_64 |
+|ICINGA-STABLE-RELEASE/7SERVER	   |                               ICINGA (stable release for epel)  |
+|RHUI-REGION-CLIENT-CONFIG-SERVER-7/X86_64	            |          rhui-REGION-client-config-server-7/x86_64 |
+|RHUI-REGION-RHEL-SERVER-RELEASES/7SERVER/X86_64	      |         Red Hat Enterprise Linux Server 7 (RPMs)  |
+|!RHUI-REGION-RHEL-SERVER-RH-COMMON/7SERVER/X86_64	    |          Red Hat Enterprise Linux Server 7 RH Common (RPMs) |
 
 
 2.	Ansible version => 2.3.1.0 installed 
