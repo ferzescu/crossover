@@ -33,13 +33,13 @@ This document is describing on how to setup a monitoring solution using Icinga. 
 
 # Installation
 Before you begin check Ansible readiness by executing:
-_ansible -m ping all_
+`ansible -m ping all`
 
 Output should be something like:
-_localhost | success >> { "changed": false, "ping": "pong" }_
+`localhost | success >> { "changed": false, "ping": "pong" }`
 
 If everything is OK, we can continue with playbook execution:
-_sudo ansible-playbook configure_playbook.yml_
+`sudo ansible-playbook configure_playbook.yml`
 
 This playbook will implement following tasks:
   - Add user “itriputen” with sudo permission to all hosts
@@ -56,13 +56,13 @@ This playbook will implement following tasks:
 
 After installation process complete without any errors, you can verify it by checking running containers:
 
-_docker ps_
+`docker ps`
 
 Output should contains 2 running containers.
 
 For finish installation process, you need manually configure DB for Icinga usage by executing following:
 ```
-docker exec -i -t mydb /bin/bash
+ docker exec -i -t mydb /bin/bash
  cd /etc/mysql
  mysql -proot -uroot < icinga.sql
  mysql -Dicinga -proot -uroot < icinga_schema.sql
@@ -73,4 +73,4 @@ docker exec -i -t mydb /bin/bash
 
 To test the Icinga run following command:
 
-_icinga --show-scheduling /etc/icinga/icinga.cfg_
+`icinga --show-scheduling /etc/icinga/icinga.cfg`
