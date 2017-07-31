@@ -13,7 +13,8 @@ This document is describing on how to setup a monitoring solution using Icinga. 
 # Pre-requirements
 1.	Following repositories for CentOS should be presented before you will run ansible playbook (in case you’re using another distributive provide similar):
 
-REPO_ID	                                                        REPO_NAME
+|REPO_ID | REPO_NAME |
+|--------|-----------|
 DOCKER-MAIN-REPO                                               	Docker main Repository
 EPEL/X86_64                                                    	Extra Packages for Enterprise Linux 7 - x86_64
 ICINGA-STABLE-RELEASE/7SERVER	                                  ICINGA (stable release for epel)  
