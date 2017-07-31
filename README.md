@@ -61,14 +61,15 @@ _docker ps_
 Output should contains 2 running containers.
 
 For finish installation process, you need manually configure DB for Icinga usage by executing following:
-
- - _docker exec -i -t mydb /bin/bash
- - cd /etc/mysql
- - mysql -proot -uroot < icinga.sql
- - mysql -Dicinga -proot -uroot < icinga_schema.sql
- - _exit (exiting DB)
- - exit (exiting container)
- - sudo systemlctl restart icinga (restarting to make Icinga service take effect)_
+'''
+docker exec -i -t mydb /bin/bash
+ cd /etc/mysql
+ mysql -proot -uroot < icinga.sql
+ mysql -Dicinga -proot -uroot < icinga_schema.sql
+ exit (exiting DB)
+ exit (exiting container)
+ sudo systemlctl restart icinga (restarting to make Icinga service take effect)
+'''
 
 To test the Icinga run following command:
 
